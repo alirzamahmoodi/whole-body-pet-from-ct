@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
@@ -200,6 +201,8 @@ def define_D(input_nc, ndf, netD, n_layers_D=3, norm='batch', init_type='normal'
         net = NLayerDiscriminator(input_nc, ndf, n_layers_D, norm_layer=norm_layer)
     elif netD == 'pixel':     # classify if each pixel is real or fake
         net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer)
+    elif netD == 'multi_scale':  # multi-scale discriminator
+        net = MultiScaleDiscriminator(input_nc, ndf, norm_layer=norm_layer)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % netD)
     return init_net(net, init_type, init_gain, gpu_ids)
@@ -617,6 +620,33 @@ class PixelDiscriminator(nn.Module):
         return self.net(input)
 
 
+class MultiScaleDiscriminator(nn.Module):
+    """Defines a multi-scale PatchGAN discriminator"""
+
+    def __init__(self, input_nc, ndf=64, norm_layer=nn.BatchNorm2d, num_discriminators=3):
+        """Construct a MultiScale PatchGAN discriminator
+
+        Parameters:
+            input_nc (int)      -- the number of channels in input images
+            ndf (int)           -- the number of filters in the first conv layer
+            norm_layer          -- normalization layer
+            num_discriminators  -- number of discriminators working at different scales
+        """
+        super(MultiScaleDiscriminator, self).__init__()
+        self.num_discriminators = num_discriminators
+        self.discriminators = nn.ModuleList()
+
+        for _ in range(num_discriminators):
+            self.discriminators.append(NLayerDiscriminator(input_nc, ndf, n_layers=3, norm_layer=norm_layer))
+
+    def forward(self, input):
+        """Standard forward for multi-scale discriminator."""
+        outputs = []
+        for discriminator in self.discriminators:
+            outputs.append(discriminator(input))
+            input = F.avg_pool2d(input, kernel_size=2)  # Downscale input for the next discriminator
+
+        return outputs
 
 ###################################################################################################################
 ##################################            ResUnetPlusPlus                ######################################
