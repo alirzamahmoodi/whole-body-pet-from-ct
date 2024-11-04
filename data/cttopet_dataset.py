@@ -17,7 +17,7 @@ from data.base_dataset import BaseDataset
 
 class CTtoPETDataset(BaseDataset):
     def __init__(self, opt):
-        self.mode = opt.mode  
+        self.mode = opt.mode
         self.preprocess_gamma = opt.preprocess_gamma
         BaseDataset.__init__(self, opt)
 
@@ -57,7 +57,7 @@ class CTtoPETDataset(BaseDataset):
             img = np.expand_dims(img, axis=0)
         return img
 
-    @classmethod    
+    @classmethod
     def postprocessPET_gamma( img, gamma=1/2 ,maxx = 10.0):
         print('    gamma of {} was selected! '.format(gamma))
         img = np.array(img)
@@ -84,7 +84,7 @@ class CTtoPETDataset(BaseDataset):
     #     if len(img.shape) == 2:
     #         img = np.expand_dims(img, axis=0)
     #     return img
-    
+
     @classmethod
     def edge_zero(cls, img):
         img[:,0,:] = 0
@@ -115,7 +115,7 @@ class CTtoPETDataset(BaseDataset):
 
     def __len__(self):
         return len(self.ids)
- 
+
     def __getitem__(self, i):
         if self.mode == 'test':
             self.ids = np.sort(self.ids)
@@ -141,5 +141,5 @@ class CTtoPETDataset(BaseDataset):
             # To float before GaussianTorch(PET)
             CT = torch.from_numpy(CT).type(torch.FloatTensor)
             PET = torch.from_numpy(PET).type(torch.FloatTensor)
- 
+
         return {'A': CT, 'B': PET, 'A_paths': self.CT_dir, 'B_paths': self.PET_dir, 'name':idx}
