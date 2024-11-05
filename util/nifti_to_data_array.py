@@ -66,7 +66,7 @@ def SavingAsNpy(CT_list, PET_list, CT_Tr_path, PET_Tr_path, CT_Ts_path, PET_Ts_p
 
             elif key in Lung:
                 print( 'Saving', key, 'case in train folder','  slides: (', start_slide,',', end_slide,')')
-                CT = io.imread(CT_list[j], plugin='simpleitk') #CT = np.array(CT)   
+                CT = io.imread(CT_list[j], plugin='simpleitk') #CT = np.array(CT)
                 PET = io.imread(PET_list[j], plugin='simpleitk') #PET = np.array(PET)
                 CT_path  = CT_Tr_path
                 PET_path   = PET_Tr_path
@@ -122,8 +122,8 @@ if __name__=='__main__':
     CT_list = CT_list[indices]
     PET_list = PET_list[indices]
     #SavingD
-    SavingAsNpy(CT_list,    PET_list,  
-                CT_Tr_path,  PET_Tr_path, 
+    SavingAsNpy(CT_list,    PET_list,
+                CT_Tr_path,  PET_Tr_path,
                 CT_Ts_path,  PET_Ts_path,
                 CT_Va_path,  PET_Va_path,
                 prefix=prefix)
