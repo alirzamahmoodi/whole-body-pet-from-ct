@@ -1,6 +1,3 @@
-- Morteza Salehjahromi, et al - [mortezasj11]
-
-<div align=left><img src="Figure/Figure1.png" width = "80%"/></div>
 
 
 ## Train
@@ -52,9 +49,9 @@ If you find CC useful in your research, please consider citing:
 ```
 
 ## Acknowledgments
-Code borrowed heavily from [pix2pix](https://github.com/phillipi/pix2pix/tree/master). 
+Code borrowed heavily from [Salehjahromi](https://github.com/WuLabMDA/Synthetic-PET-from-CT/). 
 
-The Generator architecture borrowed from [ResUNetPlusPlus](https://github.com/DebeshJha/ResUNetPlusPlus).
+The Discriminator architecture borrowed from [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
 
 
 
