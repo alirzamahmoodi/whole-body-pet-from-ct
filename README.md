@@ -19,26 +19,16 @@ After running the above code, a temp_folder is created in the /Folder_with_lung_
 
 
 ## Links
-The links to the datasets are:
+The link to the dataset paper is:
 
-MDA-TRAIN/TEST/SCREENING - N/A 
-
-[TCIA-STANFORD](https://wiki.cancerimagingarchive.net/display/Public/NSCLC+Radiogenomics )
-
-[LIDC-IDRI](https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=1966254 )
-
-[NSCLC-RT](https://www.cancerimagingarchive.net/ )
-
-## Questionnaires
-
-The questionnaires for tasks 1 and 2, as referenced in the "Imaging signal level validation by thoracic radiologists" section of our paper, can be accessed online via the following link:  [questionnaires](https://drive.google.com/drive/folders/13qlGhYc5jl9DrlINPmzAxxRiW8RYBFmW?usp=sharing). 
+[A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions](https://doi.org/10.1038/s41597-022-01718-3)
 
 ## Citation
 
-If you find CC useful in your research, please consider citing:
+Please consider citing:
 ```
 @inproceedings{****,
-  title={Synthetic PET from CT improves diagnosis and prognosis for lung cancer: proof of concept},
+  title={****},
   author={****},
   booktitle={****},
   volume={****},
