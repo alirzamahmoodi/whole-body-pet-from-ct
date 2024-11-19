@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user and switch to it
-ARG USER_NAME="msalehjahromi"
+ARG USER_NAME="alirzamahmoodi"
 RUN adduser --disabled-password --gecos '' --shell /bin/bash ${USER_NAME}
 RUN echo "${USER_NAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 USER ${USER_NAME}
