@@ -23,7 +23,7 @@ def slides_to_nifti(pred_path, nifti_file):
     img_nifti.to_filename(os.path.join(pred_path,out_files))
 
 if __name__=='__main__':
-    pred_path = 'experiment_name/npy_results'
-    nifti_file = 'experiment_name/npy_results/CTPET_3D__000000.nii.gz'
+    pred_path = '/code/experiment_name/npy_results'
+    nifti_file = '/code/experiment_name/npy_results/CTPET_3D__000000.nii.gz'
 
     slides_to_nifti(pred_path, nifti_file)
