@@ -22,12 +22,12 @@ class CTtoPETDataset(BaseDataset):
         BaseDataset.__init__(self, opt)
 
         if self.mode=='test':
-            self.CT_dir = join(opt.dataroot, 'temp_folder')
-            self.PET_dir = join(opt.dataroot, 'temp_folder')
+            self.CT_dir = os.path.join(opt.dataroot, 'temp_folder')
+            self.PET_dir = os.path.join(opt.dataroot, 'temp_folder')
         else:
-            self.CT_dir = join(opt.dataroot, 'trainA')
-            self.PET_dir = join(opt.dataroot, 'trainB')
-        self.ids = [file for file in listdir(self.CT_dir)
+            self.CT_dir = os.path.join(opt.dataroot, 'trainA')
+            self.PET_dir = os.path.join(opt.dataroot, 'trainB')
+        self.ids = [file for file in os.listdir(self.CT_dir)
                     if not file.startswith('.') and file.endswith('.npy')]
         logging.info(f'Creating dataset with {len(self.ids)} examples')
 
