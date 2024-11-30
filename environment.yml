@@ -1,16 +1,19 @@
 name: mahmoodi-pix2pixhd
 channels:
-  - pytorch
   - defaults
 dependencies:
-  - python=3.8
-  - pytorch=1.4.0
+  - python=3.7
+  - pip
   - cudatoolkit=10.1
   - scipy
   - tensorboard
+  - pillow
+  - numpy
+  - scikit-image=0.19.2
   - pip:
-    - torchvision==0.5.0
-    - dominate==2.4.0
-    - Pillow==6.1.0
-    - numpy==1.16.4
-    - visdom==0.1.8
+      - torch==1.7.1+cu101
+      - torchvision==0.8.2+cu101
+      - torchaudio==0.7.2
+      - dominate==2.4.0
+      - visdom==0.1.8
+      - --find-links https://download.pytorch.org/whl/torch_stable.html
