@@ -7,7 +7,7 @@ This is the code for following master's thesis at Amirkabir University of Techno
 - Alireza Mahmoodi
 
 
-This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The codebase is heavily inspired by [Salehjahromi's Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
+This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The research is inspired by the paper published in [Cell Reports Medicine](https://doi.org/10.1016/j.xcrm.2024.101463) by Salehjahromi et al. The codebase is forked from [Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
 
 ## Features
 
