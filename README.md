@@ -1,6 +1,11 @@
 
 
-# Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator
+# Whole-body PET from CT
+This is the code for following master's thesis at Amirkabir University of Technology: 
+
+**Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator** 
+
+- Alireza Mahmoodi
 
 This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The codebase is heavily inspired by [Salehjahromi's Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
 
