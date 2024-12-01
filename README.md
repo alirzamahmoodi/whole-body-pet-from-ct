@@ -1,7 +1,7 @@
 
 
 # Whole-body PET from CT
-This is the code for following master's thesis at [Energy Engineering and Physics Department - Amirkabir University of Technology](https://phee.aut.ac.ir): 
+This is the code for following master's thesis at [Amirkabir University of Technology](https://phee.aut.ac.ir): 
 
 **Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator** 
 - Alireza Mahmoodi
