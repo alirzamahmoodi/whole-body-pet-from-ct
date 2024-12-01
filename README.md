@@ -1,4 +1,3 @@
-Here’s a comprehensive README for your project, incorporating details about training, testing, options, and acknowledgments:
 
 ---
 
