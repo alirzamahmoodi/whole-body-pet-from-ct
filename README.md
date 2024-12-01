@@ -96,7 +96,7 @@ After running:
 
 ## Links
 
-Dataset: [Nature Scientific Data: A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions](https://doi.org/10.1038/s41597-022-01718-3)
+Dataset: [A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions](https://doi.org/10.1038/s41597-022-01718-3)
 
 ---
 
