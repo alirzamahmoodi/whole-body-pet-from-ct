@@ -1,11 +1,8 @@
 
----
 
 # Synthetic Whole-body PET Image Generation from CT Using Conditional GANs
 
 This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The codebase is heavily inspired by [Salehjahromi's Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
-
----
 
 ## Features
 
@@ -98,7 +95,6 @@ After running:
 
 Dataset: [A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions](https://doi.org/10.1038/s41597-022-01718-3)
 
----
 
 ## Citation
 
@@ -115,11 +111,9 @@ If you use this codebase, please cite:
 }
 ```
 
----
 
 ## Acknowledgments
 
 - **Codebase**: [Salehjahromi](https://github.com/WuLabMDA/Synthetic-PET-from-CT/)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
 
---- 
