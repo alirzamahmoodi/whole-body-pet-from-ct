@@ -231,8 +231,8 @@ class GANLoss(nn.Module):
         LSGAN needs no sigmoid. vanilla GANs will handle it with BCEWithLogitsLoss.
         """
         super(GANLoss, self).__init__()
-        self.register_buffer('real_label', torch.tensor(target_real_label))
-        self.register_buffer('fake_label', torch.tensor(target_fake_label))
+        self.register_buffer('real_label', torch.tensor([target_real_label], dtype=torch.float32))
+        self.register_buffer('fake_label', torch.tensor([target_fake_label], dtype=torch.float32))
         self.gan_mode = gan_mode
         if gan_mode == 'lsgan':
             self.loss = nn.MSELoss()
@@ -241,7 +241,7 @@ class GANLoss(nn.Module):
         elif gan_mode in ['wgangp']:
             self.loss = None
         else:
-            raise NotImplementedError('gan mode %s not implemented' % gan_mode)
+            raise NotImplementedError(f"gan mode {gan_mode} not implemented")
 
     def get_target_tensor(self, prediction, target_is_real):
         """Create label tensors with the same size as the input.
@@ -258,27 +258,24 @@ class GANLoss(nn.Module):
             target_tensor = self.real_label
         else:
             target_tensor = self.fake_label
-        return target_tensor.expand_as(prediction)
+
+        # Expand target_tensor to match each tensor in the prediction list
+        if isinstance(prediction, list):
+            return [target_tensor.expand_as(p) for p in prediction]
+        else:
+            return target_tensor.expand_as(prediction)
 
     def __call__(self, prediction, target_is_real):
-        """Calculate loss given Discriminator's output and grount truth labels.
-
-        Parameters:
-            prediction (tensor) - - tpyically the prediction output from a discriminator
-            target_is_real (bool) - - if the ground truth label is for real images or fake images
-
-        Returns:
-            the calculated loss.
-        """
-        if self.gan_mode in ['lsgan', 'vanilla']:
+        if isinstance(prediction, list):  # Handle multi-scale outputs
+            loss = 0
+            for pred in prediction:
+                target_tensor = self.get_target_tensor(pred, target_is_real)
+                loss += self.loss(pred, target_tensor)
+            return loss / len(prediction)
+        else:
             target_tensor = self.get_target_tensor(prediction, target_is_real)
-            loss = self.loss(prediction, target_tensor)
-        elif self.gan_mode == 'wgangp':
-            if target_is_real:
-                loss = -prediction.mean()
-            else:
-                loss = prediction.mean()
-        return loss
+            return self.loss(prediction, target_tensor)
+
 
 
 def cal_gradient_penalty(netD, real_data, fake_data, device, type='mixed', constant=1.0, lambda_gp=10.0):
