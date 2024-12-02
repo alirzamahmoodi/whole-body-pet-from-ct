@@ -93,21 +93,28 @@ class Pix2PixModel(BaseModel):
     def backward_D(self):
         """Calculate GAN loss for the discriminator"""
         # Fake; stop backprop to the generator by detaching fake_B
-        fake_AB = torch.cat((self.real_A, self.fake_B), 1)  
-        # MultiScaleDiscriminator returns a list; aggregate it
-        pred_fake = self.netD(fake_AB.detach())  
-        pred_fake_agg = torch.mean(torch.stack([p[-1] if isinstance(p, list) else p for p in pred_fake], dim=0), dim=0)
+        fake_AB = torch.cat((self.real_A, self.fake_B), 1)
+        pred_fake = self.netD(fake_AB.detach())  # List of predictions for each scale
 
-        # Compute GAN loss for fake samples
-        self.loss_D_fake = self.criterionGAN(pred_fake_agg, False)
+        # Compute GAN loss for fake samples across all scales
+        self.loss_D_fake = 0
+        for p_fake in pred_fake:
+            if isinstance(p_fake, list):  # Handle intermediate features
+                p_fake = p_fake[-1]
+            self.loss_D_fake += self.criterionGAN(p_fake, False)
+        self.loss_D_fake /= len(pred_fake)  # Average over all scales
 
         # Real
-        real_AB = torch.cat((self.real_A, self.real_B), 1)  
-        pred_real = self.netD(real_AB)  
-        pred_real_agg = torch.mean(torch.stack([p[-1] if isinstance(p, list) else p for p in pred_real], dim=0), dim=0)
+        real_AB = torch.cat((self.real_A, self.real_B), 1)
+        pred_real = self.netD(real_AB)  # List of predictions for each scale
 
-        # Compute GAN loss for real samples
-        self.loss_D_real = self.criterionGAN(pred_real_agg, True)
+        # Compute GAN loss for real samples across all scales
+        self.loss_D_real = 0
+        for p_real in pred_real:
+            if isinstance(p_real, list):  # Handle intermediate features
+                p_real = p_real[-1]
+            self.loss_D_real += self.criterionGAN(p_real, True)
+        self.loss_D_real /= len(pred_real)  # Average over all scales
 
         # Combine loss and calculate gradients
         self.loss_D = (self.loss_D_fake + self.loss_D_real) * 0.5
