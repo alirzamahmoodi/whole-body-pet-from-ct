@@ -15,6 +15,7 @@ import torchvision.transforms as tt
 import torch.nn as nn
 import torch.nn.functional as F
 from data.base_dataset import BaseDataset
+from pathlib import Path
 
 class CTtoPETDataset(BaseDataset):
     def __init__(self, opt):
@@ -23,15 +24,17 @@ class CTtoPETDataset(BaseDataset):
         BaseDataset.__init__(self, opt)
 
         if self.mode=='test':
-            self.CT_dir = os.path.join(opt.dataroot, 'temp_folder')
-            self.PET_dir = os.path.join(opt.dataroot, 'temp_folder')
+            self.CT_dir = Path(opt.dataroot) / 'temp_folder'
+            self.PET_dir = Path(opt.dataroot) / 'temp_folder'
         else:
-            self.CT_dir = os.path.join(opt.dataroot, 'trainA')
-            self.PET_dir = os.path.join(opt.dataroot, 'trainB')
+            self.CT_dir = Path(opt.dataroot) / 'trainA'
+            self.PET_dir = Path(opt.dataroot) / 'trainB'
+        self.CT_dir = str(self.CT_dir.resolve())
+        self.PET_dir = str(self.PET_dir.resolve())
+        print(f"Debug: CT_dir = {self.CT_dir}, PET_dir = {self.PET_dir}")
         self.ids = [file for file in os.listdir(self.CT_dir)
                     if not file.startswith('.') and file.endswith('.npy')]
         logging.info(f'Creating dataset with {len(self.ids)} examples')
-
     @classmethod
     def preprocessCT(cls, im, minn=-900.0, maxx=200.0, noise_std = 0):
         img_np = np.array(im)   #(5,512,512)
