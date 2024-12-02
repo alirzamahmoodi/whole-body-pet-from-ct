@@ -93,17 +93,23 @@ class Pix2PixModel(BaseModel):
     def backward_D(self):
         """Calculate GAN loss for the discriminator"""
         # Fake; stop backprop to the generator by detaching fake_B
-        fake_AB =  torch.cat((self.real_A, self.fake_B), 1) # torch.cat((self.real_A, self.fake_B), 1)  
-        # we use conditional GANs; we need to feed both input and output to the discriminator
-        #print('fake_AB:', fake_AB.shape)        ## [1, 3+3, 512, 512]
-        pred_fake = self.netD(fake_AB.detach())  ## [1, 1, 512, 512]
+        fake_AB = torch.cat((self.real_A, self.fake_B), 1)  
+        # MultiScaleDiscriminator returns a list; aggregate it
+        pred_fake = self.netD(fake_AB.detach())  
+        pred_fake_agg = torch.mean(torch.stack([p[-1] if isinstance(p, list) else p for p in pred_fake], dim=0), dim=0)
 
-        self.loss_D_fake = self.criterionGAN(pred_fake, False)
+        # Compute GAN loss for fake samples
+        self.loss_D_fake = self.criterionGAN(pred_fake_agg, False)
+
         # Real
-        real_AB = torch.cat((self.real_A, self.real_B), 1)#torch.cat((self.real_A, self.real_B), 1)
-        pred_real = self.netD(real_AB)
-        self.loss_D_real = self.criterionGAN(pred_real, True)
-        # combine loss and calculate gradients
+        real_AB = torch.cat((self.real_A, self.real_B), 1)  
+        pred_real = self.netD(real_AB)  
+        pred_real_agg = torch.mean(torch.stack([p[-1] if isinstance(p, list) else p for p in pred_real], dim=0), dim=0)
+
+        # Compute GAN loss for real samples
+        self.loss_D_real = self.criterionGAN(pred_real_agg, True)
+
+        # Combine loss and calculate gradients
         self.loss_D = (self.loss_D_fake + self.loss_D_real) * 0.5
         self.loss_D.backward()
 
