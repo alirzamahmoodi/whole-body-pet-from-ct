@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 from .base_model import BaseModel
 from . import networks
 
@@ -83,6 +84,8 @@ class Pix2PixModel(BaseModel):
         AtoB = self.opt.direction == 'AtoB'
         self.real_A = input['A' if AtoB else 'B'].to(self.device)
         self.real_B = input['B' if AtoB else 'A'].to(self.device)
+        print(f"self.real_A shape: {self.real_A.shape}")
+        print(f"self.real_B shape: {self.real_B.shape}")
         self.image_paths = input['A_paths' if AtoB else 'B_paths']
 
     def forward(self):
@@ -94,26 +97,31 @@ class Pix2PixModel(BaseModel):
         """Calculate GAN loss for the discriminator"""
         # Fake; stop backprop to the generator by detaching fake_B
         fake_AB = torch.cat((self.real_A, self.fake_B), 1)
+        print(f"fake_AB shape: {fake_AB.shape}")
         pred_fake = self.netD(fake_AB.detach())  # List of predictions for each scale
 
-        # Compute GAN loss for fake samples across all scales
+        # Resize predictions to a consistent shape before computing loss
+        target_size = pred_fake[0][-1].shape[-2:] if isinstance(pred_fake[0], list) else pred_fake[0].shape[-2:]
+
         self.loss_D_fake = 0
         for p_fake in pred_fake:
             if isinstance(p_fake, list):  # Handle intermediate features
                 p_fake = p_fake[-1]
-            self.loss_D_fake += self.criterionGAN(p_fake, False)
+            p_fake_resized = F.interpolate(p_fake, size=target_size, mode='bilinear', align_corners=False)
+            self.loss_D_fake += self.criterionGAN(p_fake_resized, False)
         self.loss_D_fake /= len(pred_fake)  # Average over all scales
 
         # Real
         real_AB = torch.cat((self.real_A, self.real_B), 1)
-        pred_real = self.netD(real_AB)  # List of predictions for each scale
+        print(f"real_AB shape: {real_AB.shape}")
+        pred_real = self.netD(real_AB)
 
-        # Compute GAN loss for real samples across all scales
         self.loss_D_real = 0
         for p_real in pred_real:
             if isinstance(p_real, list):  # Handle intermediate features
                 p_real = p_real[-1]
-            self.loss_D_real += self.criterionGAN(p_real, True)
+            p_real_resized = F.interpolate(p_real, size=target_size, mode='bilinear', align_corners=False)
+            self.loss_D_real += self.criterionGAN(p_real_resized, True)
         self.loss_D_real /= len(pred_real)  # Average over all scales
 
         # Combine loss and calculate gradients
@@ -122,13 +130,21 @@ class Pix2PixModel(BaseModel):
 
     def backward_G(self):
         """Calculate GAN and L1 loss for the generator"""
-        # First, G(A) should fake the discriminator
-        fake_AB = torch.cat((self.real_A, self.fake_B), 1) # torch.cat((self.real_A, self.fake_B), 1)
+        fake_AB = torch.cat((self.real_A, self.fake_B), 1)  # Concatenate inputs
         pred_fake = self.netD(fake_AB)
+
+        # Resize predictions to a consistent shape before aggregating
+        target_size = pred_fake[0][-1].shape[-2:] if isinstance(pred_fake[0], list) else pred_fake[0].shape[-2:]
+
+        pred_fake_resized = []
+        for p_fake in pred_fake:
+            if isinstance(p_fake, list):
+                p_fake = p_fake[-1]
+            pred_fake_resized.append(F.interpolate(p_fake, size=target_size, mode='bilinear', align_corners=False))
+        pred_fake = torch.mean(torch.stack(pred_fake_resized, dim=0), dim=0)
+
         self.loss_G_GAN = self.criterionGAN(pred_fake, True)
-        # Second, G(A) = B
         self.loss_G_L1 = self.criterionL1(self.fake_B, self.real_B) * self.opt.lambda_L1
-        # combine loss and calculate gradients
         self.loss_G = self.loss_G_GAN + self.loss_G_L1
         self.loss_G.backward()
 
