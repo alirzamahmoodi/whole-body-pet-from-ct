@@ -4,15 +4,8 @@ from util import util
 import torch
 import models
 import data
-import socket
-from datetime import datetime
 
-# Get computer name
-computer_name = socket.gethostname()
-# Get current date and time
-current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-# Set dynamic default value
-default_experiment_name = f"{computer_name}_{current_time}"
+
 class BaseOptions():
     """This class defines options used during both training and test time.
 
@@ -28,13 +21,13 @@ class BaseOptions():
         """Define the common options that are used in both training and test."""
         # basic parameters
         parser.add_argument('--dataroot', default='data_7CHL/pix2pix_7Ch7', help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')
-        parser.add_argument('--name', type=str, default=default_experiment_name, help='name of the experiment. It decides where to store samples and models')
+        parser.add_argument('--name', type=str, default='experiment_name', help='name of the experiment. It decides where to store samples and models')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--checkpoints_dir', type=str, default='Code', help='The checkpoints will be saved here')
         # model parameters
         parser.add_argument('--model', type=str, default='pix2pix', help='chooses which model to use. [cycle_gan | pix2pix | test | colorization]')
         parser.add_argument('--input_nc', type=int, default=7, help='# of input image channels: 3 for RGB and 1 for grayscale')
-        parser.add_argument('--output_nc', type=int, default=1, help='# of output image channels: 3 for RGB and 1 for grayscale')
+        parser.add_argument('--output_nc', type=int, default=3, help='# of output image channels: 3 for RGB and 1 for grayscale')
         parser.add_argument('--ngf', type=int, default=64, help='# of gen filters in the last conv layer')
         parser.add_argument('--ndf', type=int, default=64, help='# of discrim filters in the first conv layer')
         parser.add_argument('--netD', type=str, default='multi_scale', help='specify discriminator architecture [basic | n_layers | pixel | multi_scale]. The basic model is a 70x70 PatchGAN. n_layers allows you to specify the layers in the discriminator')
