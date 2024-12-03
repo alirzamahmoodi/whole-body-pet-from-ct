@@ -47,8 +47,7 @@ data_7CHL/pix2pix_7Ch7/
 
 Copy latest_net_G.pth from checkpoints folder to this path before execution:
 ```
-code/experiment_name/
-├── latest_net_G.pth   # CT data
+code/experiment_name/latest_net_G.pth
 ```
 This ensures loading generator weights from the pre-trained model.
 
