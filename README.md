@@ -36,7 +36,7 @@ conda activate pix2pixhd
 ### Data Preparation
 Organize the data as follows:
 ```
-/data_7CHL/pix2pix_7Ch7/
+data_7CHL/pix2pix_7Ch7/
 ├── trainA/   # CT data
 ├── trainB/   # PET data
 ├── testA/   # PET test data
@@ -45,10 +45,17 @@ Organize the data as follows:
 ├── valB/     # PET validation data
 ```
 
+Copy latest_net_G.pth from checkpoints folder to this path before execution:
+```
+code/experiment_name/
+├── latest_net_G.pth   # CT data
+```
+This ensures loading generator weights from the pre-trained model.
+
 ### Training Command
 Train the model with:
 ```bash
-python train.py --name 'experiment_name' --dataroot '/data_7CHL/pix2pix_7Ch7' --lr 0.0002 --lambda_L1 4000 --batch_size 4 --n_epochs 100
+python train.py --batch_size 4
 ```
 
 ### Notes
@@ -65,7 +72,7 @@ The pre-trained model achieving results reported in the paper is available in th
 ### Testing Command
 Test the model with:
 ```bash
-python testNifty.py --dataroot '/Folder_with_lung_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir '/Result_folder'
+python testNifty.py --dataroot 'Folder_with_lung_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir 'Result_folder'
 ```
 
 After running:
