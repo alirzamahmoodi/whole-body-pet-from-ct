@@ -4,8 +4,15 @@ from util import util
 import torch
 import models
 import data
+import socket
+from datetime import datetime
 
-
+# Get computer name
+computer_name = socket.gethostname()
+# Get current date and time
+current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+# Set dynamic default value
+default_experiment_name = f"{computer_name}_{current_time}"
 class BaseOptions():
     """This class defines options used during both training and test time.
 
@@ -21,7 +28,7 @@ class BaseOptions():
         """Define the common options that are used in both training and test."""
         # basic parameters
         parser.add_argument('--dataroot', default='data_7CHL/pix2pix_7Ch7', help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')
-        parser.add_argument('--name', type=str, default='experiment_name_and_date', help='name of the experiment. It decides where to store samples and models')
+        parser.add_argument('--name', type=str, default=default_experiment_name, help='name of the experiment. It decides where to store samples and models')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--checkpoints_dir', type=str, default='Code', help='The checkpoints will be saved here')
         # model parameters
