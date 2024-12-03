@@ -9,9 +9,9 @@ from torch.utils.data import Dataset
 import logging
 from PIL import Image
 from skimage.restoration import denoise_tv_chambolle
-import torchvision.transforms.functional as TF
-from torchvision import transforms
-import torchvision.transforms as tt
+import torchvision.transforms.functional as TF # type: ignore
+from torchvision import transforms # type: ignore
+import torchvision.transforms as tt # type: ignore
 import torch.nn as nn
 import torch.nn.functional as F
 from data.base_dataset import BaseDataset
@@ -37,27 +37,26 @@ class CTtoPETDataset(BaseDataset):
         logging.info(f'Creating dataset with {len(self.ids)} examples')
     @classmethod
     def preprocessCT(cls, im, minn=-900.0, maxx=200.0, noise_std = 0):
-        img_np = np.array(im)   #(5,512,512)
+        img_np = np.array(im)  # Shape should remain (7, 512, 512)
         # Adding Noise
         if noise_std:
-            s0,s1,s2 = img_np.shape
-            img_np = img_np + noise_std*np.random.randn(s0,s1,s2)
-        img_np = np.clip(img_np,minn ,maxx)
-        img_np = (img_np - minn)/(maxx-minn)
+            img_np += noise_std * np.random.randn(*img_np.shape)
+        img_np = np.clip(img_np, minn, maxx)
+        img_np = (img_np - minn) / (maxx - minn)
+        print(f"CT min: {img_np.min()}, max: {img_np.max()}, shape: {img_np.shape}")
         return img_np
 
     # Gamma Function on PET
     @classmethod
     def preprocessPET_gamma(cls, img, gamma = 1/2, maxx = 7, noise_std=0, scale=1. ):
-        img = np.array(img)
-        img = img/scale
+        img = np.array(img, dtype=np.float32)  # Ensure input is float32 for safe operations
+        img /= scale  # Scale the input
         if noise_std:
-            s0,s1,s2 = img.shape
-            img = img + noise_std*np.random.randn(s0,s1,s2)
-        img = np.clip(img, 0, maxx)
-        img = img/maxx
-        img = np.power(img, gamma)
-        if len(img.shape) == 2:
+            img += noise_std * np.random.randn(*img.shape)  # Add noise of the same shape
+        img = np.clip(img, 0, maxx)  # Clip values to the range [0, maxx]
+        img /= maxx  # Normalize to [0, 1]
+        img = np.power(img, gamma)  # Apply gamma correction
+        if len(img.shape) == 2:  # If the image is 2D, add a channel dimension
             img = np.expand_dims(img, axis=0)
         return img
 
@@ -130,7 +129,9 @@ class CTtoPETDataset(BaseDataset):
         PET = np.load(PET_file)
         CT = np.load(CT_file)
         # Normalizing
+        print(f"Loaded CT shape before preprocessing: {CT.shape}")
         CT = self.preprocessCT(CT[:,:,:])
+        print(f"CT shape after preprocessing: {CT.shape}")
         if not self.preprocess_gamma:
             PET = self.preprocessPET(PET[2:5,:,:]) # if 1 channel chosen then
         else:
