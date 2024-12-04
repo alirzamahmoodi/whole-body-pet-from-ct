@@ -20,8 +20,8 @@ This repository implements a model to generate synthetic PET images from CT scan
 
 ## Prerequisites
 
-- **Hardware**: A machine with a GPU supporting CUDA 10.1 or higher is recommended. Tested with NVIDIA GPUs (e.g., GTX or RTX series).
-- **Software**: Python 3.7, PyTorch 1.7.1, torchvision 0.8.2 and other dependencies listed in the `environment.yml`.
+- **Hardware**: A machine with an Nvidia GTX or RTX series GPU supporting CUDA 10.1 or higher is recommended (Tested also with CUDA 12.4).
+- **Software**: Python 3.9, PyTorch 2.5.0, torchvision 0.20.0 and other dependencies listed in the `environment.yml`.
 
 Set up the environment using:
 ```bash
