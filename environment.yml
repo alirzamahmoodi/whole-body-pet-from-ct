@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3.9
   - pip
-  - cudatoolkit=12.4
+  - nvidia/label/cuda-12.4.1::cuda-toolkit
   - scipy
   - tensorboard
   - pillow
