@@ -13,7 +13,7 @@ This repository implements a model to generate synthetic PET images from CT scan
 
 - **Multi-Channel Input**: Supports CT data arrays with seven consecutive axial slices (512x512x7).
 - **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator (Initial weights borrowed from Salehjahromi et al.)
-- **PatchGAN Discriminator**: Employs a multi-scale PatchGAN for adversarial training (Architecture borrowed from Nvidia's Pix2pixHD)
+- **Mullti-scale Discriminator**: Employs a multi-scale PatchGAN for adversarial training (Architecture borrowed from Nvidia's Pix2pixHD)
 - **Customizable Options**: Easily configurable training and testing options through command-line arguments.
 
 ---
