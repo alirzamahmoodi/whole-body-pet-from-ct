@@ -26,7 +26,7 @@ This repository implements a model to generate synthetic PET images from CT scan
 Set up the environment using:
 ```bash
 conda env create -f environment.yml
-conda activate pix2pixhd
+conda activate mahmoodi-pix2pixhd
 ```
 
 ---
