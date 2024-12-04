@@ -1,20 +1,19 @@
 name: mahmoodipix2pixhd
 channels:
+  - nvidia/label/cuda-12.4.1
   - defaults
 dependencies:
   - python=3.9
   - pip
-  - nvidia/label/cuda-12.4.1::cuda-toolkit
+  - cuda-toolkit=12.4
   - scipy
   - tensorboard
   - pillow
   - numpy
   - scikit-image=0.24.0
   - pip:
-      - torch==2.5.0
-      - torchvision==0.20.0
-      - torchaudio==2.5.0
+      - torch==2.5.0 --index-url https://download.pytorch.org/whl/cu124
+      - torchvision==0.20.0 --index-url https://download.pytorch.org/whl/cu124
+      - torchaudio==2.5.0 --index-url https://download.pytorch.org/whl/cu124
       - dominate==2.9.1
       - visdom==0.2.4
-
-
