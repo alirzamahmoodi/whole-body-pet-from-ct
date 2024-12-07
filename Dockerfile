@@ -28,16 +28,13 @@ RUN conda env create -f /home/${USER_NAME}/environment.yml \
  && conda clean -ya
 
 # Set up the conda environment
-ENV CONDA_DEFAULT_ENV=mahmoodipix2pixhd
+ENV CONDA_DEFAULT_ENV=cttopet-pix2pixhd
 ENV CONDA_PREFIX=/home/${USER_NAME}/miniconda/envs/$CONDA_DEFAULT_ENV
 ENV PATH=$CONDA_PREFIX/bin:$PATH
 
 # Set the working directory
 WORKDIR /home/${USER_NAME}
 
-# Install additional Python packages if needed
-RUN pip install dominate==2.9.1 \
-    visdom==0.2.4
 
 # Optional: Uncomment to add commands for building and running the container
 # docker build -t ctpet .
