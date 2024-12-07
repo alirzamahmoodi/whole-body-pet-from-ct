@@ -1,4 +1,4 @@
-name: mahmoodipix2pixhd
+name: cttopet-pix2pixhd
 channels:
   - nvidia/label/cuda-12.4.1
   - defaults

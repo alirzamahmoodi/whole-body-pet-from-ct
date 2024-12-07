@@ -26,7 +26,7 @@ This repository implements a model to generate synthetic PET images from CT scan
 The codebase successfully ran with two different environments. The first environment utilized Python 3.7 with CUDA 10.1 and PyTorch 1.7.1, a configuration suitable for legacy GPUs and older dependencies. In contrast, the second environment leveraged Python 3.9, CUDA 12.4, and PyTorch 2.5.0 for newer setups compatibility. The `environment.yml` file contains the latest environment setup. Set up the environment using:
 ```bash
 conda env create -f environment.yml
-conda activate mahmoodi-pix2pixhd
+conda activate cttopet-pix2pixhd
 ```
 
 ---
