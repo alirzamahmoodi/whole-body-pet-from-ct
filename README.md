@@ -56,7 +56,7 @@ Train the model with:
 ```bash
 python train.py --batch_size 4
 ```
-Set a smalle batch size for poor GPU memories.
+Set a smaller batch size for poor GPU memories.
 
 ### Notes
 - Specify the GPU with `CUDA_VISIBLE_DEVICES`, e.g., `CUDA_VISIBLE_DEVICES=0 python train.py`.
