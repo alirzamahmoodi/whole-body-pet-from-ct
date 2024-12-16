@@ -72,7 +72,7 @@ The pre-trained model achieving results reported in the paper is available in th
 ### Testing Command
 Test the model with:
 ```bash
-python testNifty.py --dataroot 'Folder_with_lung_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir 'Result_folder'
+python testNifty.py --dataroot 'Folder_with_whole_body_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir 'Result_folder'
 ```
 
 After running:
