@@ -16,13 +16,25 @@ def GiveImageAndTargetLists(main_path):
             for study_folder in os.listdir(patient_path):
                 study_path = os.path.join(patient_path, study_folder)
                 if os.path.isdir(study_path):
-                    CT_path = os.path.join(study_path, "CT.nii.gz")     #updated to handle *.nii.gz instead of *.mhd
-                    PET_path = os.path.join(study_path, "PET.nii.gz")    #updated to handle *.nii.gz instead of *.mhd
+                    CT_path = os.path.join(study_path, "CT.nii.gz")     # updated to handle *.nii.gz instead of *.mhd
+                    PET_path = os.path.join(study_path, "PET.nii.gz")   # updated to handle *.nii.gz instead of *.mhd
                     if os.path.exists(CT_path) and os.path.exists(PET_path):
-                        CT_list.append(CT_path)
-                        PET_list.append(PET_path)
+                        # Load the CT and PET images
+                        CT_img = nib.load(CT_path)
+                        PET_img = nib.load(PET_path)
+                        
+                        # Get the number of slices
+                        CT_slices = CT_img.shape[2]
+                        PET_slices = PET_img.shape[2]
+                        
+                        # Ensure the number of slices are aligned and constrained to the number of PET slices
+                        if CT_slices >= PET_slices:
+                            CT_list.append(CT_path)
+                            PET_list.append(PET_path)
+                        else:
+                            print(f"Skipping {study_path} due to fewer CT slices: CT {CT_slices}, PET {PET_slices}")
 
-    return (CT_list, PET_list)
+    return CT_list, PET_list
 
 
 def SavingAsNpy(CT_list, PET_list, CT_Tr_path, PET_Tr_path, CT_Ts_path, PET_Ts_path, CT_Va_path, PET_Va_path, prefix=""):
@@ -115,4 +127,3 @@ if __name__=='__main__':
                 CT_Ts_path,  PET_Ts_path,
                 CT_Va_path,  PET_Va_path,
                 prefix=prefix)
-
