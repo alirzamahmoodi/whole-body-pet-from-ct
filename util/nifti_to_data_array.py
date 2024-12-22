@@ -111,7 +111,7 @@ if __name__=='__main__':
     os.makedirs(PET_Ts_path,exist_ok=True)
 
     #Getting images_list & target_list
-    raw_dot_m_files = 'E:/nifti_output/FDG-PET-CT-Lesions/'
+    raw_dot_m_files = 'FDG-PET-CT-Lesions'
     CT_list, PET_list = GiveImageAndTargetLists(raw_dot_m_files)
     print("len(CT_list) & len(PET_list):",len(CT_list),'  &  ' ,len(PET_list))
     prefix = ""
