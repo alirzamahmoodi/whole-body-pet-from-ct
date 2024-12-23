@@ -15,8 +15,8 @@ This repository implements a model to generate synthetic PET images from CT scan
 - **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator (Initial weights borrowed from Salehjahromi et al.)
 - **Mullti-scale Discriminator**: Employs a multi-scale PatchGAN for adversarial training (Architecture borrowed from Nvidia's Pix2pixHD)
 - **Customizable Options**: Easily configurable training and testing options through command-line arguments.
-<div align=center><img src="checkpoints/Figure0.png" width = "80%"/></div>
 <div align=center><img src="checkpoints/Figure1.JPG" width = "80%"/></div>
+<div align=center><img src="checkpoints/Figure0.png" width = "80%"/></div>
 ---
 
 ## Prerequisites
