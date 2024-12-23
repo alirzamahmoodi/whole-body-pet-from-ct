@@ -17,7 +17,6 @@ This repository implements a model to generate synthetic PET images from CT scan
 - **Customizable Options**: Easily configurable training and testing options through command-line arguments.
 <div align=center><img src="checkpoints/Figure1.JPG" width = "80%"/></div>
 <div align=center><img src="checkpoints/Figure0.png" width = "80%"/></div>
----
 
 ## Prerequisites
 
