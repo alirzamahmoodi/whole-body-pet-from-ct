@@ -2,39 +2,30 @@ import os
 import numpy as np
 import nibabel as nib
 import SimpleITK as sitk
+import skimage.io as io
+import shutil
 
-
-def resample_image(image, target_slices=284, target_size=(512, 512)):
-    """
-    Resamples the image to the target number of slices and size.
-    """
-    # Get original size and spacing
+def resample_image(image, target_slices):
     original_size = image.GetSize()
     original_spacing = image.GetSpacing()
-
-    # New spacing to achieve target slices
     new_spacing = (
         original_spacing[0],
         original_spacing[1],
-        original_spacing[2] * original_size[2] / target_slices
+        original_spacing[2] * (original_size[2] / target_slices)
     )
-
-    # Define resampling size
-    new_size = (target_size[0], target_size[1], target_slices)
-
-    # Resample using SimpleITK
-    resampler = sitk.ResampleImageFilter()
-    resampler.SetOutputSpacing(new_spacing)
-    resampler.SetSize(new_size)
-    resampler.SetInterpolator(sitk.sitkLinear)
-    resampler.SetOutputOrigin(image.GetOrigin())
-    resampler.SetOutputDirection(image.GetDirection())
-    
-    resampled_image = resampler.Execute(image)
+    new_size = (
+        original_size[0],
+        original_size[1],
+        target_slices
+    )
+    resample = sitk.ResampleImageFilter()
+    resample.SetOutputSpacing(new_spacing)
+    resample.SetSize(new_size)
+    resample.SetInterpolator(sitk.sitkLinear)
+    resampled_image = resample.Execute(image)
     return resampled_image
 
-
-def GiveImageAndTargetLists(main_path):
+def GiveImageAndTargetLists(main_path, target_slices=284):
     CT_list = []
     PET_list = []
 
@@ -47,11 +38,39 @@ def GiveImageAndTargetLists(main_path):
                     CT_path = os.path.join(study_path, "CT.nii.gz")
                     PET_path = os.path.join(study_path, "PET.nii.gz")
                     if os.path.exists(CT_path) and os.path.exists(PET_path):
-                        CT_list.append(CT_path)
-                        PET_list.append(PET_path)
+                        # Load the CT and PET images
+                        CT_img = sitk.ReadImage(CT_path)
+                        PET_img = sitk.ReadImage(PET_path)
+
+                        # Resample the images to the target number of slices
+                        CT_img_resampled = resample_image(CT_img, target_slices)
+                        PET_img_resampled = resample_image(PET_img, target_slices)
+
+                        # Convert to numpy arrays
+                        CT_np = sitk.GetArrayFromImage(CT_img_resampled)
+                        PET_np = sitk.GetArrayFromImage(PET_img_resampled)
+
+                        # Ensure the correct number of channels (7)
+                        if CT_np.shape[0] >= 7:
+                            CT_np = CT_np[:7, :, :]
+                        else:
+                            CT_np = np.pad(CT_np, ((0, 7 - CT_np.shape[0]), (0, 0), (0, 0)), mode='constant')
+
+                        if PET_np.shape[0] >= 7:
+                            PET_np = PET_np[:7, :, :]
+                        else:
+                            PET_np = np.pad(PET_np, ((0, 7 - PET_np.shape[0]), (0, 0), (0, 0)), mode='constant')
+
+                        # Save the resampled images to temporary files
+                        CT_resampled_path = os.path.join(study_path, "CT_resampled.nii.gz")
+                        PET_resampled_path = os.path.join(study_path, "PET_resampled.nii.gz")
+                        sitk.WriteImage(sitk.GetImageFromArray(CT_np), CT_resampled_path)
+                        sitk.WriteImage(sitk.GetImageFromArray(PET_np), PET_resampled_path)
+
+                        CT_list.append(CT_resampled_path)
+                        PET_list.append(PET_resampled_path)
 
     return CT_list, PET_list
-
 
 def SavingAsNpy(CT_list, PET_list, CT_Tr_path, PET_Tr_path, CT_Ts_path, PET_Ts_path, CT_Va_path, PET_Va_path, prefix=""):
     count_ts = 0
