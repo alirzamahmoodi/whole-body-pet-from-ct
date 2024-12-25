@@ -79,13 +79,6 @@ def get_params(opt, size):
 
 
 def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, convert=True):
-    print("#################################################################")
-    print("#################################################################")
-    print("#################################################################")
-    print("####*******************************************************######")
-    print("#################################################################")
-    print("#################################################################")
-    print("#################################################################")
     transform_list = []
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
@@ -94,12 +87,6 @@ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, conve
         transform_list.append(transforms.Resize(osize, method))
     elif 'scale_width' in opt.preprocess:
         transform_list.append(transforms.Lambda(lambda img: __scale_width(img, opt.load_size, opt.crop_size, method)))
-
-    # if 'crop' in opt.preprocess:
-    #     if params is None:
-    #         transform_list.append(transforms.RandomCrop(opt.crop_size))
-    #     else:
-    #         transform_list.append(transforms.Lambda(lambda img: __crop(img, params['crop_pos'], opt.crop_size)))
 
     if opt.preprocess == 'none':
         transform_list.append(transforms.Lambda(lambda img: __make_power_2(img, base=4, method=method)))
@@ -115,7 +102,7 @@ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, conve
         if grayscale:
             transform_list += [transforms.Normalize((0.5,), (0.5,))]
         else:
-            transform_list += [transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+            transform_list += [transforms.Normalize((0.5,) * 7, (0.5,) * 7)]  # Normalize each channel separately
     return transforms.Compose(transform_list)
 
 

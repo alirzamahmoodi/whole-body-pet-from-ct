@@ -17,7 +17,7 @@ def visualize_model():
     model = Pix2PixModel()  # Replace with your model class
 
     # Dummy input tensor
-    dummy_input = torch.randn(1, 7, 512, 512)  # Adjust shape to match your input data
+    dummy_input = torch.randn(1, 7, 512, 512)  # Ensure the input tensor has 7 channels
 
     # Forward pass
     output = model(dummy_input)

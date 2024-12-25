@@ -58,10 +58,14 @@ class TestModel(BaseModel):
         """
         self.real = input['A'].to(self.device)
         self.image_paths = input['A_paths']
+        # Ensure the input tensor has 7 channels
+        assert self.real.shape[1] == 7, "Input tensor must have 7 channels"
 
     def forward(self):
         """Run forward pass."""
         self.fake = self.netG(self.real)  # G(real)
+        # Ensure the output tensor has the expected shape
+        assert self.fake.shape[1] == self.opt.output_nc, "Output tensor must have the expected number of channels"
 
     def optimize_parameters(self):
         """No optimization for test model."""
