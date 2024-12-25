@@ -25,7 +25,7 @@ def resample_image(image, target_slices):
     resampled_image = resample.Execute(image)
     return resampled_image
 
-def GiveImageAndTargetLists(main_path, target_slices=284):
+def GiveImageAndTargetLists(main_path, target_slices=280):
     CT_list = []
     PET_list = []
 
@@ -51,24 +51,23 @@ def GiveImageAndTargetLists(main_path, target_slices=284):
                         PET_np = sitk.GetArrayFromImage(PET_img_resampled)
 
                         # Ensure the correct number of channels (7)
-                        if CT_np.shape[0] >= 7:
-                            CT_np = CT_np[:7, :, :]
-                        else:
-                            CT_np = np.pad(CT_np, ((0, 7 - CT_np.shape[0]), (0, 0), (0, 0)), mode='constant')
+                        CT_np_stacks = [CT_np[i:i+7, :, :] for i in range(0, CT_np.shape[0], 7)]
+                        PET_np_stacks = [PET_np[i:i+7, :, :] for i in range(0, PET_np.shape[0], 7)]
 
-                        if PET_np.shape[0] >= 7:
-                            PET_np = PET_np[:7, :, :]
-                        else:
-                            PET_np = np.pad(PET_np, ((0, 7 - PET_np.shape[0]), (0, 0), (0, 0)), mode='constant')
+                        for i, (ct_stack, pet_stack) in enumerate(zip(CT_np_stacks, PET_np_stacks)):
+                            if ct_stack.shape[0] < 7:
+                                ct_stack = np.pad(ct_stack, ((0, 7 - ct_stack.shape[0]), (0, 0), (0, 0)), mode='constant')
+                            if pet_stack.shape[0] < 7:
+                                pet_stack = np.pad(pet_stack, ((0, 7 - pet_stack.shape[0]), (0, 0), (0, 0)), mode='constant')
 
-                        # Save the resampled images to temporary files
-                        CT_resampled_path = os.path.join(study_path, "CT_resampled.nii.gz")
-                        PET_resampled_path = os.path.join(study_path, "PET_resampled.nii.gz")
-                        sitk.WriteImage(sitk.GetImageFromArray(CT_np), CT_resampled_path)
-                        sitk.WriteImage(sitk.GetImageFromArray(PET_np), PET_resampled_path)
+                            # Save the resampled images to temporary files
+                            CT_resampled_path = os.path.join(study_path, f"CT_resampled_{i}.nii.gz")
+                            PET_resampled_path = os.path.join(study_path, f"PET_resampled_{i}.nii.gz")
+                            sitk.WriteImage(sitk.GetImageFromArray(ct_stack), CT_resampled_path)
+                            sitk.WriteImage(sitk.GetImageFromArray(pet_stack), PET_resampled_path)
 
-                        CT_list.append(CT_resampled_path)
-                        PET_list.append(PET_resampled_path)
+                            CT_list.append(CT_resampled_path)
+                            PET_list.append(PET_resampled_path)
 
     return CT_list, PET_list
 
@@ -98,8 +97,8 @@ def SavingAsNpy(CT_list, PET_list, CT_Tr_path, PET_Tr_path, CT_Ts_path, PET_Ts_p
         # Load and resample the NIfTI files
         CT = sitk.ReadImage(CT_list[j])
         PET = sitk.ReadImage(PET_list[j])
-        CT_resampled = resample_image(CT, target_slices=284)
-        PET_resampled = resample_image(PET, target_slices=284)
+        CT_resampled = resample_image(CT, target_slices=280)
+        PET_resampled = resample_image(PET, target_slices=280)
 
         # Convert to NumPy arrays
         CT_np = sitk.GetArrayFromImage(CT_resampled)

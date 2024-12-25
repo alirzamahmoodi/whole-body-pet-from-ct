@@ -33,9 +33,9 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
     ims, txts, links = [], [], []
 
     for label, im_data in visuals.items():
-        # I added
-        if im_data.shape[1]==5:
-            im_data = im_data[:,2,:,:].unsqueeze(1)
+        # Ensure the correct number of channels (7)
+        if im_data.shape[1] == 7:
+            im_data = im_data[:, 3, :, :].unsqueeze(1)  # Use the middle slice for visualization
         im = util.tensor2im(im_data)
         image_name = '%s_%s.png' % (name, label)
         save_path = os.path.join(image_dir, image_name)
@@ -47,8 +47,7 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
 ## I added
 def save_npy(visuals, image_path):
-    visuals_numpy = (visuals['fake_B'][0,1,:,:]).cpu().float().numpy() 
-    #print('npy file saved in {}'.format(image_path))
+    visuals_numpy = (visuals['fake_B'][0, 3, :, :]).cpu().float().numpy()  # Use the middle slice for saving
     np.save(image_path, visuals_numpy)
 
 
@@ -173,8 +172,8 @@ class Visualizer():
                 try:
                     for label, image in visuals.items():
                         # I added 2 lines here
-                        if image.shape[1]==5:
-                            image = image[:,2,:,:].unsqueeze(1)
+                        if image.shape[1]==7:
+                            image = image[:,3,:,:].unsqueeze(1)
                         image_numpy = util.tensor2im(image)
                         self.vis.image(image_numpy.transpose([2, 0, 1]), opts=dict(title=label),
                                        win=self.display_id + idx)
