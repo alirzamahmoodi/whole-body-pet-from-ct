@@ -1,7 +1,7 @@
 
 
 # Whole-body PET from CT
-This is the code for following master's thesis at [Amirkabir University of Technology](https://phee.aut.ac.ir): 
+This is the code for following master's thesis at [Amirkabir University of Technology]([https://phee.aut.ac.ir](https://aut.ac.ir/deptdatam_graduate_list.php?sid=17&slc_lang=fa&deptname=%D9%85%D9%87%D9%86%D8%AF%D8%B3%DB%8C%20%D9%87%D8%B3%D8%AA%D9%87%20%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%D8%A8%D8%B1%D8%AF%D9%BE%D8%B1%D8%AA%D9%88%D9%87%D8%A7#:~:text=%DB%B3,%DB%B1%DB%B4%DB%B0%DB%B1)): 
 
 **Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator** 
 - Alireza Mahmoodi
@@ -129,4 +129,5 @@ If you use this codebase, please cite:
 
 - **Codebase**: [Salehjahromi](https://github.com/WuLabMDA/Synthetic-PET-from-CT/)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
+
 
