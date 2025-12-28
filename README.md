@@ -1,32 +1,31 @@
 
 
 # Whole-body PET from CT
-This is the code for following master's thesis at [Amirkabir University of Technology](https://phee.aut.ac.ir): 
 
 **Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator** 
-- Alireza Mahmoodi
+<div align=center><img src="checkpoints/comparison_metrics.png" width = "80%"/></div>
 
-
-This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The research is inspired by the paper published in [Cell Reports Medicine](https://doi.org/10.1016/j.xcrm.2024.101463) by Salehjahromi et al. The codebase is forked from [Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
+This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator.
 
 ## Features
 
 - **Multi-Channel Input**: Supports CT data arrays with seven consecutive axial slices (512x512x7).
-- **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator (Initial weights borrowed from Salehjahromi et al.)
+- **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator.
 - **Mullti-scale Discriminator**: Employs a multi-scale PatchGAN for adversarial training (Architecture borrowed from Nvidia's Pix2pixHD)
 - **Customizable Options**: Easily configurable training and testing options through command-line arguments.
-
----
+<div align=center><img src="checkpoints/Figure0.png" width = "80%"/></div>
+<div align=center><img src="checkpoints/Figure2.png" width = "80%"/></div>
+<div align=center><img src="checkpoints/Figure1.JPG" width = "80%"/></div>
 
 ## Prerequisites
 
 - **Hardware**: A machine with an Nvidia GTX or RTX series GPU supporting CUDA 10.1 or higher is recommended (Tested also with CUDA 12.4).
 - **Software**: Python 3.9, PyTorch 2.5.0, torchvision 0.20.0 and other dependencies listed in the `environment.yml`.
 
-Set up the environment using:
+The codebase successfully ran with two different environments. The first environment utilized Python 3.7 with CUDA 10.1 and PyTorch 1.7.1, a configuration suitable for legacy GPUs and older dependencies. In contrast, the second environment leveraged Python 3.9, CUDA 12.4, and PyTorch 2.5.0 for newer setups compatibility. The `environment.yml` file contains the latest environment setup. Set up the environment using:
 ```bash
 conda env create -f environment.yml
-conda activate mahmoodi-pix2pixhd
+conda activate cttopet-pix2pixhd
 ```
 
 ---
@@ -56,7 +55,7 @@ Train the model with:
 ```bash
 python train.py --batch_size 4
 ```
-Set a smalle batch size for poor GPU memories.
+Set a smaller batch size for poor GPU memories.
 
 ### Notes
 - Specify the GPU with `CUDA_VISIBLE_DEVICES`, e.g., `CUDA_VISIBLE_DEVICES=0 python train.py`.
@@ -72,7 +71,7 @@ The pre-trained model achieving results reported in the paper is available in th
 ### Testing Command
 Test the model with:
 ```bash
-python testNifty.py --dataroot 'Folder_with_lung_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir 'Result_folder'
+python testNifty.py --dataroot 'Folder_with_whole_body_CT_Nifti_files_inside' --name 'checkpoints' --mode 'test' --preprocess_gamma 1 --results_dir 'Result_folder'
 ```
 
 After running:
@@ -126,6 +125,5 @@ If you use this codebase, please cite:
 
 ## Acknowledgments
 
-- **Codebase**: [Salehjahromi](https://github.com/WuLabMDA/Synthetic-PET-from-CT/)
+- **Generator Architecture**: [ResUNet++](https://github.com/DebeshJha/ResUNetPlusPlus)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
-
