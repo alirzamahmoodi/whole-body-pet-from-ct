@@ -5,12 +5,12 @@
 **Synthetic Whole-body PET Image Generation from CT Using a cGAN with a Multi-scale Discriminator** 
 <div align=center><img src="checkpoints/comparison_metrics.png" width = "80%"/></div>
 
-This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator. The research is inspired by the paper published in [Cell Reports Medicine](https://doi.org/10.1016/j.xcrm.2024.101463) by Salehjahromi et al. The codebase is forked from [Synthetic PET from CT](https://github.com/WuLabMDA/Synthetic-PET-from-CT/) and integrates modifications for handling multi-scale discriminator and efficient testing workflows.
+This repository implements a model to generate synthetic PET images from CT scans using a conditional GAN framework. The model employs a ResUNet++ generator and a multi-scale PatchGAN discriminator.
 
 ## Features
 
 - **Multi-Channel Input**: Supports CT data arrays with seven consecutive axial slices (512x512x7).
-- **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator (Initial weights borrowed from Salehjahromi et al.)
+- **ResUNet++ Generator**: Utilizes a ResUNet++ architecture for the generator.
 - **Mullti-scale Discriminator**: Employs a multi-scale PatchGAN for adversarial training (Architecture borrowed from Nvidia's Pix2pixHD)
 - **Customizable Options**: Easily configurable training and testing options through command-line arguments.
 <div align=center><img src="checkpoints/Figure0.png" width = "80%"/></div>
@@ -127,6 +127,7 @@ If you use this codebase, please cite:
 
 - **Generator Architecture**: [ResUNet++](https://github.com/DebeshJha/ResUNetPlusPlus)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
+
 
 
 
