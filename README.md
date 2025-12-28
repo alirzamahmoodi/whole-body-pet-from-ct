@@ -125,8 +125,9 @@ If you use this codebase, please cite:
 
 ## Acknowledgments
 
-- **Codebase**: [Salehjahromi](https://github.com/WuLabMDA/Synthetic-PET-from-CT/)
+- **Generator Architecture**: [ResUNet++](https://github.com/DebeshJha/ResUNetPlusPlus)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
+
 
 
 
