@@ -84,7 +84,7 @@ After running:
 
 ### Shared Options
 - **`--dataroot`**: Root directory for data.
-- **`--gpu_ids`**: Specify GPU(s) to use (e.g., `0` or `0,1`).
+- **`--gpu_ids`**: Specify GPU(s) to use (e.g., `0` or `0,1`. Use `-1` for CPU).
 - **`--input_nc`**: Number of input channels (default: `7` for multi-channel CT data).
 - **`--output_nc`**: Number of output channels (default: `1` for PET images).
 - **`--batch_size`**: Batch size during training/testing.
@@ -127,6 +127,7 @@ If you use this codebase, please cite:
 
 - **Generator Architecture**: [ResUNet++](https://github.com/DebeshJha/ResUNetPlusPlus)
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
+
 
 
 
