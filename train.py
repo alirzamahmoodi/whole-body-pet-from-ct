@@ -58,7 +58,10 @@ if __name__ == '__main__':
 
         if tensorboard_save:
             visuals = model.get_current_visuals()     #
-            mid_rA_idx, mid_rB_idx, mid_fB_idx  = int((visuals['real_A'].shape[1]-1)/2), int((visuals['real_B'].shape[1]-1)/2), int((visuals['fake_B'].shape[1]-1)/2)
+            # real_A: (B,7,H,W) -> middle channel index 3; real_B,fake_B: (B,3,H,W) -> middle channel index 1
+            mid_rA_idx = visuals['real_A'].shape[1] // 2  # 7 channels -> index 3
+            mid_rB_idx = visuals['real_B'].shape[1] // 2  # 3 channels -> index 1
+            mid_fB_idx = visuals['fake_B'].shape[1] // 2  # 3 channels -> index 1
             writer.add_images('CT',       torch.unsqueeze(visuals['real_A'][:,mid_rA_idx,:,:], dim=1), epoch) #
             writer.add_images('PET_Real', torch.unsqueeze(visuals['real_B'][:,mid_rB_idx,:,:], dim=1), epoch)
             writer.add_images('PET_Fake', torch.clip(torch.unsqueeze(visuals['fake_B'][:,mid_fB_idx,:,:], dim=1), 0.0, 1.0), epoch)

@@ -47,7 +47,8 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
 
 ## I added
 def save_npy(visuals, image_path):
-    visuals_numpy = (visuals['fake_B'][0, 3, :, :]).cpu().float().numpy()  # Use the middle slice for saving
+    # fake_B has shape (B, 3, H, W) - extract middle channel (index 1) for saving
+    visuals_numpy = (visuals['fake_B'][0, 1, :, :]).cpu().float().numpy()  # Use the middle channel for saving
     np.save(image_path, visuals_numpy)
 
 

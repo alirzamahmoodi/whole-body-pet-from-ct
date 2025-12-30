@@ -58,22 +58,35 @@ class Nifty():
         return img
 
     def npy_to_nifti(self, pred_path, nifti_file):
-        file_list = np.sort([file for file in os.listdir(pred_path) if file.endswith('.npy')]) #should be (7, 512,512)
+        """Reconstruct 3D Nifti volume from 2D PET predictions.
+        
+        Each .npy file contains a 2D predicted PET slice (512, 512).
+        We reconstruct the full 3D volume by placing each prediction at its corresponding depth position.
+        """
+        file_list = np.sort([file for file in os.listdir(pred_path) if file.endswith('.npy')])
         whole_img = nib.load(nifti_file)
-        PET = np.zeros( whole_img.get_fdata().shape )
-        #print('the prediction PET shape is :  ' ,PET.shape )
-        #print('len(file_list) :  ' , len(file_list) )
-        for i, file_path in enumerate( file_list ):
-            #PET[:,:,i+3] =  np.flipud(      np.load(  os.path.join(pred_path,file_path)   )      )
-            PET[:,:,i+3] =  np.rot90(      np.load(  os.path.join(pred_path,file_path)   ) ,  +1 )   
-            PET[:,:,i+3] = np.flipud(PET[:,:,i+3]) # I just added on OCT30 with line 65 as im = np.fliplr(im)
-        PET = self.nonlinear_PET(PET) if self.preprocess_gamma==False else self.post_gamma_PET(PET,  maxx=7.0 )
-        img_nifti = nib.Nifti1Image( PET, whole_img.affine )
-        out_files = ("{}_pred.nii.gz".format(os.path.split(nifti_file)[1].split('.nii')[0] )  ) 
-        nifty_folder = os.path.join( os.path.dirname(pred_path), 'nifty_pred')
+        original_shape = whole_img.get_fdata().shape
+        PET = np.zeros(original_shape)
+        
+        # Map predictions back to original volume
+        # file_list index i corresponds to depth position i+3 (from create_npy_from_Nifty: range(3, n_slide-3, slide))
+        for i, file_path in enumerate(file_list):
+            depth_idx = i + 3
+            if depth_idx < original_shape[2]:  # Safety check
+                pred_2d = np.load(os.path.join(pred_path, file_path))  # Shape: (512, 512)
+                # Apply transformations to match original orientation
+                pred_2d = np.rot90(pred_2d, +1)
+                pred_2d = np.flipud(pred_2d)
+                PET[:, :, depth_idx] = pred_2d
+        
+        # Apply post-processing
+        PET = self.nonlinear_PET(PET) if self.preprocess_gamma == False else self.post_gamma_PET(PET, maxx=7.0)
+        img_nifti = nib.Nifti1Image(PET, whole_img.affine)
+        out_files = ("{}_pred.nii.gz".format(os.path.split(nifti_file)[1].split('.nii')[0]))
+        nifty_folder = os.path.join(os.path.dirname(pred_path), 'nifty_pred')
         os.makedirs(nifty_folder, exist_ok=True)
-        img_nifti.to_filename(os.path.join(nifty_folder,out_files))
-        print( '3.  converted to Nifty!', out_files)
+        img_nifti.to_filename(os.path.join(nifty_folder, out_files))
+        print('3.  converted to Nifty!', out_files)
 
     def remove_npy(self, path):
         all_files = os.listdir(path) if os.path.exists(path) else []

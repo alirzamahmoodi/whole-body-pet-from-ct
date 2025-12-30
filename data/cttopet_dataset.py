@@ -106,8 +106,8 @@ class CTtoPETDataset(BaseDataset):
         return img
 
     # Data Augmentation
-    def transform(self, CT, PET): #(1,512,512)
-        # Affine
+    def transform(self, CT, PET): # CT: (7,512,512), PET: (3,512,512)
+        # Affine transformations applied to both CT and PET consistently
         if torch.rand(1) < 0.95:
             affine_params = tt.RandomAffine(0).get_params((-45, 45), (0.10, 0.10), (0.85, 1.15), (-7 , 7 ),img_size=(512,512))
         else:
