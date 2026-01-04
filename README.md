@@ -129,11 +129,3 @@ If you use this codebase, please cite:
 - **Discriminator Architecture**: [pix2pixHD](https://github.com/chenxli/High-Resolution-Image-Synthesis-and-Semantic-Manipulation-with-Conditional-GANsl-).
 
 
-
-
-
-
-
-
-
-
